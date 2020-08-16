@@ -45,6 +45,8 @@ func makeBasicHost(listenPort int, insecure bool, randseed int64) (host.Host, er
 	}
 
 	opts := []libp2p.Option{
+		// TODO: why is this displayed as 127.0.0.1?
+		// still can access it from a 192.* address...
 		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", listenPort)),
 		libp2p.Identity(priv),
 		libp2p.DisableRelay(),
@@ -65,12 +67,20 @@ func makeBasicHost(listenPort int, insecure bool, randseed int64) (host.Host, er
 	// Now we can build a full multiaddress to reach this host
 	// by encapsulating both addresses:
 	addr := basicHost.Addrs()[0]
+	log.Printf("addr %s\n", addr)
 	fullAddr := addr.Encapsulate(hostAddr)
 	log.Printf("I am %s\n", fullAddr)
-	if insecure {
-		log.Printf("Now run \"./echo -l %d -d %s -insecure\" on a different terminal\n", listenPort+1, fullAddr)
+	var peerListenPort int
+	if listenPort == 0 {
+		// use random ports for both peers
+		peerListenPort = 0
 	} else {
-		log.Printf("Now run \"./echo -l %d -d %s\" on a different terminal\n", listenPort+1, fullAddr)
+		peerListenPort = listenPort + 1
+	}
+	if insecure {
+		log.Printf("Now run \"./echo-stun -l %d -d %s -insecure\" on a different terminal\n", peerListenPort, fullAddr)
+	} else {
+		log.Printf("Now run \"./echo-stun -l %d -d %s\" on a different terminal\n", peerListenPort, fullAddr)
 	}
 
 	return basicHost, nil
@@ -88,10 +98,6 @@ func main() {
 	insecure := flag.Bool("insecure", false, "use an unencrypted connection")
 	seed := flag.Int64("seed", 0, "set random seed for id generation")
 	flag.Parse()
-
-	if *listenF == 0 {
-		log.Fatal("Please provide a port to bind on with -l")
-	}
 
 	// Make a host that listens on the given multiaddress
 	ha, err := makeBasicHost(*listenF, *insecure, *seed)
