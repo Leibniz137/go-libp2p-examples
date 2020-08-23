@@ -79,9 +79,9 @@ func makeBasicHost(listenPort int, insecure bool, randseed int64) (host.Host, er
 		peerListenPort = listenPort + 1
 	}
 	if insecure {
-		log.Printf("Now run \"./echo-stun -l %d -d %s -insecure\" on a different terminal\n", peerListenPort, fullAddr)
+		log.Printf("Now run \"./echo-nat -l %d -d %s -insecure\" on a different terminal\n", peerListenPort, fullAddr)
 	} else {
-		log.Printf("Now run \"./echo-stun -l %d -d %s\" on a different terminal\n", peerListenPort, fullAddr)
+		log.Printf("Now run \"./echo-nat -l %d -d %s\" on a different terminal\n", peerListenPort, fullAddr)
 	}
 
 	return basicHost, nil
