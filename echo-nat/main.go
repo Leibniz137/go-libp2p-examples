@@ -50,6 +50,7 @@ func makeBasicHost(listenPort int, insecure bool, randseed int64) (host.Host, er
 		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", listenPort)),
 		libp2p.Identity(priv),
 		libp2p.DisableRelay(),
+		libp2p.NATPortMap(),
 	}
 
 	if insecure {
