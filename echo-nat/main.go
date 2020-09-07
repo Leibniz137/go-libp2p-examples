@@ -54,7 +54,7 @@ func makeBasicHost(listenPort int, insecure bool, randseed int64) (host.Host, er
 
 		// the host will attempt to dial back
 		// to peers, and then tell them if it was successful in making such connections.
-		libp2p.EnableNATService(),
+		// libp2p.EnableNATService(),
 	}
 
 	if insecure {
