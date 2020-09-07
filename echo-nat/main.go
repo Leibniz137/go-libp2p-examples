@@ -81,7 +81,7 @@ func makeBasicHost(listenPort int, insecure bool, randseed int64) (host.Host, er
 	if insecure {
 		log.Printf("Now run \"./echo-nat -l %d -d %s -insecure\" on a different terminal\n", peerListenPort, fullAddr)
 	} else {
-		log.Printf("Now run \"./echo-nat -l %d -d %s\" on a different terminal\n", peerListenPort, fullAddr)
+		log.Printf("Now run \"./echo-nat -d %s\" on a different terminal\n", fullAddr)
 	}
 
 	return basicHost, nil
